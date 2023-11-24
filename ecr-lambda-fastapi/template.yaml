@@ -8,8 +8,8 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 600
-    MemorySize: 256
+    Timeout: 10
+    MemorySize: 128
 
 Resources:
   HelloWorldFunction:
