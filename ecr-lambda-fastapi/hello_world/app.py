@@ -7,11 +7,11 @@ import json
 
 app = FastAPI()
 
-@app.get("/hello")
+@app.get("/hello", status_code=201)
 async def root():
     return {"message`": "Hello REST API Demo using FastAPI deployed on Lambda!"}
 
-@app.get("/{name}")
+@app.get("/{name}", status_code=201)
 async def intro(name: str):
     return JSONResponse({"message`": f"Hello {name}! Nice to meet you"})
 
