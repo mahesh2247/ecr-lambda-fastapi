@@ -15,21 +15,42 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Environment:
+        Variables:
+          USERS_TABLE_NAME: !Ref UserTable
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
       PackageType: Image
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        HelloWorldFunctionRoot:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /
             Method: ANY
+        HelloWorldFunctionProxy:
+          Type: Api
+          Properties:
             Path: /{proxy+}
             Method: ANY
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: ./hello_world
       DockerTag: python3.9-v1
+
+  UserTable:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Delete
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: u_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: u_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
